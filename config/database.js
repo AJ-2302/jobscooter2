@@ -1,12 +1,14 @@
+//database.js
+
 const mysql = require('mysql2/promise');
 
 // Create connection pool
 const pool = mysql.createPool({
-    host: 'localhost',
-    port: 3306,
-    database: 'jobscootercoz614_jobscooter',  // <-- your actual database name in phpMyAdmin
-    user: 'root',             // <-- default XAMPP user
-    password: '',             // <-- default is empty
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 3306,
+    database: process.env.DB_NAME || 'jobscootercoz614_jobscooter',
+    user: process.env.DB_USER || 'jobscootercoz614_jobscooter',
+    password: process.env.DB_PASSWORD,
     waitForConnections: true,
     connectionLimit: 20,
     queueLimit: 0
@@ -43,5 +45,3 @@ module.exports = {
     },
     pool
 };
-
-
