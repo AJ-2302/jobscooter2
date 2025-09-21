@@ -1,29 +1,30 @@
 const nodemailer = require('nodemailer');
 
 // Create transporter with production SMTP settings
+const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT || 587,
+    secure: false, // Use STARTTLS
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+    },
+    tls: {
+        rejectUnauthorized: false // For self-signed certificates
+    }
+});
+
+// my code
 // const transporter = nodemailer.createTransport({
-//     host: process.env.SMTP_HOST,
-//     port: process.env.SMTP_PORT || 587,
-//     secure: false, // Use STARTTLS
+//     host: process.env.SMTP_HOST,     // smtp.gmail.com
+//     port: Number(process.env.SMTP_PORT), // 465
+//     secure: true,                    // Must be true for 465
 //     auth: {
 //         user: process.env.SMTP_USER,
-//         pass: process.env.SMTP_PASS
-//     },
-//     tls: {
-//         rejectUnauthorized: false // For self-signed certificates
+//         pass: process.env.SMTP_PASS   // App Password
 //     }
 // });
 
-// my code
-const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,     // smtp.gmail.com
-    port: Number(process.env.SMTP_PORT), // 465
-    secure: true,                    // Must be true for 465
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS   // App Password
-    }
-});
 
 // Test email connection
 transporter.verify((error, success) => {
