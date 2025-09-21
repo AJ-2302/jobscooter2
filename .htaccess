@@ -1,0 +1,45 @@
+# JobScooter .htaccess Configuration
+
+# Enable rewrite engine
+RewriteEngine On
+
+# Force HTTPS (if SSL is available)
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# API Routes - Proxy to Node.js server on port 3000
+RewriteCond %{REQUEST_URI} ^/api/(.*)$
+RewriteRule ^api/(.*)$ http://localhost:3000/api/$1 [P,L]
+
+# Handle pre-application page
+RewriteRule ^pre-application/?$ /pre-application.html [L]
+
+# Handle static assets
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Default to index.html for root
+DirectoryIndex index.html
+
+# Security Headers
+Header always set X-Content-Type-Options nosniff
+Header always set X-Frame-Options DENY
+Header always set X-XSS-Protection "1; mode=block"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+# CORS Headers for API requests
+Header always set Access-Control-Allow-Origin "https://www.jobscooter.co.za"
+Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization"
+
+# Cache static assets
+<FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg)$">
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+</FilesMatch>
+
+# Prevent access to sensitive files
+<FilesMatch "\.(env|json|md|log)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
