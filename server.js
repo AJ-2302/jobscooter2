@@ -18,7 +18,19 @@ const publicRoutes = require('./routes/public');
 const testEmailRoutes = require('./routes/test-email');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
+
+// Database Configuration (Production MySQL)
+const dbConfig = {
+    host: process.env.MYSQLHOST || 'localhost',
+    user: process.env.MYSQLUSER || 'root',
+    password: process.env.MYSQLPASSWORD || '',
+    database: process.env.MYSQLDATABASE || 'jobscootercoz614_jobscooter',
+    port: process.env.MYSQLPORT || 3306,
+    connectTimeout: 60000,
+    acquireTimeout: 60000,
+    timeout: 60000,
+};
 
 // ✅ Force redirect to www Block I added. Will delete if it does not work
 app.use((req, res, next) => {
